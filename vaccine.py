@@ -54,7 +54,7 @@ def check_availability(code, vaccine_center_list):
         if "sessions" in center:
             for session in center["sessions"]:
                 for fee in center["vaccine_fees"]:
-                    if session["available_capacity_dose1"] > 0 and session["min_age_limit"] < 45:
+                    if session["available_capacity_dose1"] > 10 and session["min_age_limit"] < 45:
                         print(
                             "{} Yeppi vaccine available :). Search code: {}, {}, {}, {}, {}".format(
                                 datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
@@ -67,8 +67,7 @@ def check_availability(code, vaccine_center_list):
                                 center["address"],
                             )
                         )
-                        msg = f"Pincode: {code}\nDose 1 Available Capacity: {session['available_capacity_dose1']}\nVaccine: {session['vaccine']}\n\nCenter Name: {center['name']}\n\nDate: {session['date']}\nFees: Rs.{fee['fee']}"
-                        print(center["vaccine_fees"])
+                        msg = f"Pincode: {code}\nDose 1 Available Capacity: {session['available_capacity_dose1']}\nVaccine: {session['vaccine']}\n\nCenter Name: {center['name']}\n\nDate: {session['date']}\nFees: ₹{fee['fee']}"
                         bashCmd = ["telegram-send", msg]
                         process = subprocess.Popen(bashCmd, stdout=subprocess.PIPE)
                         return
