@@ -61,13 +61,14 @@ def check_availability(code, vaccine_center_list):
                                 code,
                                 session["available_capacity_dose1"],
                                 session["vaccine"],
+                                center["district_name"],
                                 fee["fee"],
                                 session["date"],
                                 center["name"],
                                 center["address"],
                             )
                         )
-                        msg = f"Pincode: {code}\nDose 1 Available Capacity: {session['available_capacity_dose1']}\nVaccine: {session['vaccine']}\n\nCenter Name: {center['name']}\n\nDate: {session['date']}\nFees: ₹{fee['fee']}"
+                        msg = f"Pincode: {code}\nDistrict: {center['district_name']}\n\nDose 1 Available Capacity: {session['available_capacity_dose1']}\nVaccine: {session['vaccine']}\n\nCenter Name: {center['name']}\n\nDate: {session['date']}\nFees: ₹{fee['fee']}"
                         bashCmd = ["telegram-send", msg]
                         process = subprocess.Popen(bashCmd, stdout=subprocess.PIPE)
                         return
