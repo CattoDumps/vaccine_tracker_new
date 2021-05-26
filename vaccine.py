@@ -5,17 +5,12 @@ import schedule
 import requests
 import re
 
-# T0 get the area code:
-# 1) Get the state code under https://cdn-api.co-vin.in/api/v2/admin/location/states
-# 2) Get the area code from https://cdn-api.co-vin.in/api/v2/admin/location/districts/<state code>
-# '265' = Bangalore Urban
-# '294' = BBMP
 areacodes = []
 pincodes = [
     "416520",
     "412115",
     "411004",
-    "411040",
+    "411007",
     "411001",
     "411057",
     "411030",
@@ -31,7 +26,6 @@ pincodes = [
     "411044",
 ]
 
-
 def check_vaccine_availability():
     try:
         for areacode in areacodes:
@@ -39,8 +33,7 @@ def check_vaccine_availability():
         for pin in pincodes:
             query_cowin(pin, True)
     except:
-        print("Something went wrok. But I am still alive.")
-
+        print("Something went wrong. But I am still alive.")
 
 def query_cowin(code, is_pincode):
     print("Checking vaccine for {}".format(code))
@@ -56,34 +49,34 @@ def query_cowin(code, is_pincode):
     vaccine_center_list = response.json()
     check_availability(code, vaccine_center_list)
 
-
 def check_availability(code, vaccine_center_list):
     for center in vaccine_center_list["centers"]:
         if "sessions" in center:
             for session in center["sessions"]:
-                if session["available_capacity"] > 0 and session["min_age_limit"] < 45:
-                    print(
-                        "{} Yeppi vaccine available :). Search code: {}, {}, {}, {}, {}".format(
-                            datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
-                            code,
-                            session["available_capacity_dose2"],
-                            session["vaccine"],
-                            session["fee"],
-                            session["date"],
-                            center["name"],
-                            center["address"],
+                for fee in center["vaccine_fees"]:
+                    if session["available_capacity_dose1"] > 0 and session["min_age_limit"] < 45:
+                        print(
+                            "{} Yeppi vaccine available :). Search code: {}, {}, {}, {}, {}".format(
+                                datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
+                                code,
+                                session["available_capacity_dose1"],
+                                session["vaccine"],
+                                fee["fee"],
+                                session["date"],
+                                center["name"],
+                                center["address"],
+                            )
                         )
-                    )
-                    msg = f"Pincode: {code}\nDose 2 Available Capacity: {session['available_capacity_dose2']}\nVaccine: {session['vaccine']}\nCenter Name: {center['name']}\nFee: Rs.{['fee']}\nDate: {['date']}"
-                    bashCmd = ["telegram-send", msg]
-                    process = subprocess.Popen(bashCmd, stdout=subprocess.PIPE)
-                    return
+                        msg = f"Pincode: {code}\nDose 1 Available Capacity: {session['available_capacity_dose1']}\nVaccine: {session['vaccine']}\n\nCenter Name: {center['name']}\n\nDate: {session['date']}\nFees: Rs.{fee['fee']}"
+                        print(center["vaccine_fees"])
+                        bashCmd = ["telegram-send", msg]
+                        process = subprocess.Popen(bashCmd, stdout=subprocess.PIPE)
+                        return
     print("No vaccine yet :(")
-
 
 # check_vaccine_availability()
 schedule.every(5).seconds.do(check_vaccine_availability)
 print("Vaccine monitoring started.")
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(5)
