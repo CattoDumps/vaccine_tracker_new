@@ -4,3 +4,4 @@
 ```bash
 “pip3 install schedule requests subprocess re”
 ```
+Used by multiple people for successful registration to take vaccines!
