@@ -1,6 +1,10 @@
-## This needs telegram-send to be configured already.
-## Replace the pincodes with the ones you want to monitor
-## Install the following:-
+# Vaccine Tracker - New
+
+> This needs telegram-send to be configured already.
+> 
+> Replace the pincodes with the ones you want to monitor
+
+##  Install the following:-
 ```bash
 “pip3 install schedule requests subprocess re”
 ```
@@ -8,3 +12,7 @@ This is a very useful bot used for tracking the available slots for vaccines in 
 
 Used by multiple people for successful registration to take vaccines!
 
+**Bot will be active till the user achieves the following:**
+
+- [x] Dose 1
+- [x] Dose 2
